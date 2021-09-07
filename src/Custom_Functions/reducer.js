@@ -75,7 +75,8 @@ const reducer =  (state,action) =>{
         return {
             ...state,
             currentlyDisplayedProducts: Array.from(sortedProducts),
-            sortType: action.payload
+            sortType: action.payload,
+            productsPaginationIndex: 1
         }
     }
 
