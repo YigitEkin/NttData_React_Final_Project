@@ -33,6 +33,7 @@ const initialValue = {
     isSearchTagActive: false,
     sortType: "",
     isCartEmpty: true,
+    isCartDisplayed: true
 }
 
 const store = createStore(reducer,  initialValue,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -80,11 +81,9 @@ function App() {
             <Grid container item spacing={3} xs={12}  sm={12} md={4} alignItems="center" justifyContent="space-between" direction="row">
         <List/>
             </Grid>
-            <Hidden smDown>
                 <Grid container item spacing={3} md={4} alignItems="flex-start" justifyContent="space-between" direction="row">
                     <Cart/>
                 </Grid>
-            </Hidden>
         </Grid>
     </Provider>
     )

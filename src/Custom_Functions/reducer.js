@@ -193,7 +193,6 @@ const reducer =  (state,action) =>{
                 cart: Array.from(itemAddedCart),
                 total: currentPriceTotal,
                 isCartEmpty: false,
-                isCartDisplayed: false
             }
         } else {
             itemAddedCart[indexToAdd].amount++;
@@ -203,7 +202,6 @@ const reducer =  (state,action) =>{
                 cart: Array.from(itemAddedCart),
                 total: currentPriceTotal,
                 isCartEmpty: false,
-                isCartDisplayed: false
             }
         }
     }
@@ -229,7 +227,6 @@ const reducer =  (state,action) =>{
                 cart: Array.from(itemRemovedCart),
                 total: currentPriceTotal,
                 isCartEmpty: isCartEmpty,
-                isCartDisplayed: isCartEmpty
             }
         }
         else {

@@ -92,19 +92,20 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Cart = ({total, cart,add_to_cart, remove_from_cart, isCartEmpty}) => {
+const Cart = ({total, cart,add_to_cart, remove_from_cart, isCartEmpty, isCartDisplayed}) => {
         const classes = useStyles();
 
         return (
             <>
-                <div className={classes.root}>
+                { isCartDisplayed && (<div className={classes.root}>
                     <Paper variant="outlined"/>
                     {
-                        isCartEmpty? (
+                        isCartEmpty ? (
                             <>
-                            <p className={classes.emptyLabel}> <ErrorIcon className={classes.errorLogo} />  Sepetinizde ürün bulunmamaktadır</p>
-                        </>
-                        ) :cart.map((item) => {
+                                <p className={classes.emptyLabel}><ErrorIcon className={classes.errorLogo}/> Sepetinizde
+                                    ürün bulunmamaktadır</p>
+                            </>
+                        ) : cart.map((item) => {
                             return (
                                 <section className={classes.itemButtonSection}>
                                     <div>
@@ -116,7 +117,8 @@ const Cart = ({total, cart,add_to_cart, remove_from_cart, isCartEmpty}) => {
                                                 className={classes.operationButton}><p
                                             className={classes.operationButton}>-</p></button>
                                         <p className={classes.itemAmount}>{item.amount}</p>
-                                        <button onClick={() => add_to_cart(item)} className={classes.operationButton}><p className={classes.operationButton}>+</p></button>
+                                        <button onClick={() => add_to_cart(item)} className={classes.operationButton}><p
+                                            className={classes.operationButton}>+</p></button>
                                     </div>
                                 </section>
                             )
@@ -124,14 +126,14 @@ const Cart = ({total, cart,add_to_cart, remove_from_cart, isCartEmpty}) => {
                     }
                     {!isCartEmpty && <p className={classes.total}>{"₺" + (total.toFixed(2))}</p>}
                     <Paper variant="outlined" square/>
-                </div>}
+                </div>)}
             </>
         );
 }
 
 
 const mapStateToProps = (state) => {
-    return {total: state.total, cart: state.cart, isCartEmpty: state.isCartEmpty}
+    return {total: state.total, cart: state.cart, isCartEmpty: state.isCartEmpty, isCartDisplayed: state.isCartDisplayed}
 }
 
 const mapDispatchToProps = (dispatch) => {
