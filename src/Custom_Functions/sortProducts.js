@@ -1,29 +1,23 @@
-const sortProducts = (sortType,data) => {
+const sortProducts = (sortType, data) => {
     if (sortType === "low_to_high") {
-        const sortedProducts = data.sort((first, second) => {
-            return (second.price - first.price)
-        });
-        return sortedProducts
-
-    }
-
-    else if (sortType === "high_to_low") {
         const sortedProducts = data.sort((first, second) => {
             return (first.price - second.price)
         });
-        return sortedProducts;
-    }
+        return sortedProducts
 
-    else if (sortType === "new_to_old") {
+    } else if (sortType === "high_to_low") {
         const sortedProducts = data.sort((first, second) => {
-            return (second.added - first.added);
+            return (second.price - first.price)
         });
         return sortedProducts;
-    }
-
-    else if (sortType === "old_to_new") {
+    } else if (sortType === "new_to_old") {
         const sortedProducts = data.sort((first, second) => {
-            return (first.added - second.added)
+            return (first.added - second.added);
+        });
+        return sortedProducts;
+    } else if (sortType === "old_to_new") {
+        const sortedProducts = data.sort((first, second) => {
+            return (second.added - first.added)
         })
         return sortedProducts;
     }
