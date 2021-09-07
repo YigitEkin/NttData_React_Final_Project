@@ -2,13 +2,13 @@ import sortProducts from "./sortProducts";
 import calculateTotalPrice from "./calculateTotalPrice";
 
 
-const reducer =  (state,action) =>{
+const reducer = (state, action) => {
     const filterProducts = (currentBrands, currentTags, isMugDisplayed, sortType) => {
-        const productType = isMugDisplayed ? state.mugs: state.shirts;
+        const productType = isMugDisplayed ? state.mugs : state.shirts;
         let filteredProducts = productType;
 
         if (currentBrands.length !== 0) {
-            filteredProducts = productType.filter( (item) => currentBrands.includes(item.manufacturer));
+            filteredProducts = productType.filter((item) => currentBrands.includes(item.manufacturer));
         }
 
         if (currentTags.length !== 0) {
@@ -30,22 +30,22 @@ const reducer =  (state,action) =>{
     }
     if (action.type === "ASSIGN_PRODUCT_DATA") {
         //assigning mugs and shirts
-        const filteredMugs = action.payload.products.filter((item)=> item.itemType === "mug");
-        const filteredShirts = action.payload.products.filter((item)=> item.itemType === "shirt");
+        const filteredMugs = action.payload.products.filter((item) => item.itemType === "mug");
+        const filteredShirts = action.payload.products.filter((item) => item.itemType === "shirt");
 
         //assigning tag values
         let allTagsArray = [];
         for (let i = 0; i < action.payload.products.length; i++) {
             allTagsArray = new Set([...allTagsArray, ...action.payload.products[i].tags]);
         }
-        const sortedTagsArray = Array.from(allTagsArray).sort((first,second) => first.localeCompare(second));
+        const sortedTagsArray = Array.from(allTagsArray).sort((first, second) => first.localeCompare(second));
 
         //finding hardcoded tag counts
         let tagCounts = []
         for (let i = 0; i < action.payload.products.length; i++) {
             tagCounts.concat(0);
         }
-        const initiallyDisplayedProducts= Array.from(sortProducts("high_to_low",filteredMugs))
+        const initiallyDisplayedProducts = Array.from(sortProducts("low_to_high", filteredMugs))
         return {
             ...state,
             products: action.payload.products,
@@ -59,7 +59,7 @@ const reducer =  (state,action) =>{
     }
 
     if (action.type === "ASSIGN_COMPANY_DATA") {
-        const sortedCompanies = action.payload.companies.sort((first,second) => {
+        const sortedCompanies = action.payload.companies.sort((first, second) => {
             return first.name.localeCompare(second.name);
         });
 
@@ -71,7 +71,7 @@ const reducer =  (state,action) =>{
     }
 
     if (action.type === "SORT") {
-        const sortedProducts = sortProducts(state.sortType,state.currentlyDisplayedProducts);
+        const sortedProducts = sortProducts(action.payload, state.currentlyDisplayedProducts);
         return {
             ...state,
             currentlyDisplayedProducts: Array.from(sortedProducts),
@@ -82,17 +82,17 @@ const reducer =  (state,action) =>{
 
     if (action.type === "SHIRT_FILTER") {
         let filteredProducts = filterProducts(state.currentlyCheckedBrands, state.currentlyCheckedTags, false, state.sortType)
-            return  {
-                ...state,
-                currentlyDisplayedProducts: filteredProducts,
-                isMugDisplayed: false,
-                productsPaginationIndex: 1
-            }
+        return {
+            ...state,
+            currentlyDisplayedProducts: filteredProducts,
+            isMugDisplayed: false,
+            productsPaginationIndex: 1
+        }
     }
 
     if (action.type === "MUG_FILTER") {
         let filteredProducts = filterProducts(state.currentlyCheckedBrands, state.currentlyCheckedTags, true, state.sortType)
-        return  {
+        return {
             ...state,
             currentlyDisplayedProducts: filteredProducts,
             isMugDisplayed: true,
@@ -114,7 +114,7 @@ const reducer =  (state,action) =>{
         } else { //remove the brand from the list
             const currentBrands = state.currentlyCheckedBrands.filter((item) => {
                 return item !== action.payload.brandName
-            } );
+            });
 
             const filteredProducts = filterProducts(currentBrands, state.currentlyCheckedTags, state.isMugDisplayed, state.sortType)
             return {
@@ -140,7 +140,7 @@ const reducer =  (state,action) =>{
         } else { //remove the tag from the list
             const currentTags = state.currentlyCheckedTags.filter((item) => {
                 return item !== action.payload.tagName
-            } );
+            });
 
 
             const filteredProducts = filterProducts(state.currentlyCheckedBrands, currentTags, state.isMugDisplayed, state.sortType)
@@ -155,9 +155,9 @@ const reducer =  (state,action) =>{
 
     if (action.type === "SEARCH_BRAND") {
         const isActiveSearch = (action.payload !== "")
-        const filteredBrands = state.companies.filter( (item) => {
-             return item.slug.toString().toLowerCase().includes(action.payload.toString().toLowerCase());
-        } )
+        const filteredBrands = state.companies.filter((item) => {
+            return item.slug.toString().toLowerCase().includes(action.payload.toString().toLowerCase());
+        })
         return {
             ...state,
             filteredCompaniesBySearchBar: filteredBrands,
@@ -167,9 +167,9 @@ const reducer =  (state,action) =>{
 
     if (action.type === "SEARCH_TAG") {
         const isActiveSearch = (action.payload !== "")
-        const filteredTags = state.tags.filter( (item) => {
+        const filteredTags = state.tags.filter((item) => {
             return item.toLowerCase().includes(action.payload.toLowerCase());
-        } )
+        })
         return {
             ...state,
             filteredTagsBySearchBar: filteredTags,
@@ -177,7 +177,7 @@ const reducer =  (state,action) =>{
         }
     }
 
-    if (action.type === "ADD_TO_CART"){
+    if (action.type === "ADD_TO_CART") {
         let itemAddedCart = state.cart;
         let indexToAdd = -1;
         for (let i = 0; i < state.cart.length; i++) {
@@ -187,7 +187,7 @@ const reducer =  (state,action) =>{
         }
 
         if (indexToAdd === -1) {
-            itemAddedCart = [...state.cart, {name: action.payload.name, amount: 1, price: action.payload.price, added: action.payload.added}];
+            itemAddedCart = [...state.cart, { name: action.payload.name, amount: 1, price: action.payload.price, added: action.payload.added }];
             const currentPriceTotal = calculateTotalPrice(itemAddedCart);
             return {
                 ...state,
@@ -229,8 +229,7 @@ const reducer =  (state,action) =>{
                 total: currentPriceTotal,
                 isCartEmpty: isCartEmpty,
             }
-        }
-        else {
+        } else {
             itemRemovedCart[indexToRemove].amount--;
             const currentPriceTotal = calculateTotalPrice(itemRemovedCart);
             return {
